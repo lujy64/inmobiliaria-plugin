@@ -54,7 +54,7 @@ Este plugin permite crear y gestionar un tipo de contenido personalizado llamado
 
 ## Autor
 
-the Panther Soft (Maria Lujan Vaira)  
+The Panther Soft (Maria Lujan Vaira)  
 [https://thepanthersoft.com/](https://thepanthersoft.com/)
 
 ## Licencia
