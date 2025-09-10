@@ -1,0 +1,821 @@
+/*
+Plugin Name: Inmobiliaria Plugin
+Plugin URI:  
+Description: Plugin para gestionar inmuebles y mostrar listados en WordPress.
+Version: 1.0
+Author: the Panther Soft (Maria Lujan Vaira)
+Author URI: https://thepanthersoft.com/
+*/
+
+
+.inmobiliaria-listado {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Estilo general de la tarjeta */
+.inmueble-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    transition: transform 0.3s ease;
+    height: fit-content;
+    border: 1px solid #D5D5D5;
+}
+section#destacadas {
+    padding-bottom: 0px;
+}
+
+/* Contenedor de la imagen */
+.inmueble-image {
+    position: relative;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+
+/* Overlay del botón */
+.inmueble-image .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.inmueble-card:hover .overlay {
+    opacity: 1; /* Mostrar el overlay al pasar el mouse */
+}
+
+/* Botón "Ver más" */
+.overlay a {
+    color: #000;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.overlay a:hover {
+    background: #fff;
+    color: #000;
+}
+
+.inmueble-precio {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 10px;
+}
+
+.inmueble-ubicacion {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0 0 10px;
+}
+
+.inmueble-detalles {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.inmueble-detalles span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.inmueble-detalles span:before {
+    content: '•';
+    color: #007BFF;
+    font-weight: bold;
+}
+
+#inmueble_location .card-ubicacion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+#inmueble_location .card-ubicacion > div {
+    width: 50%!important;
+}
+.inmueble-galeria {
+    margin-bottom: 20px;
+    width: 703px;
+    margin-left: -116px;
+}
+.inmueble-datos {
+    width: 506px;
+}
+
+.gallery-main-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.gallery-main-container img {
+    width: 885px;
+    height: 664px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.gallery-main-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url(/wp-content/uploads/2025/04/marca-de-agua-de-AGRA.png);
+    background-size: contain;
+    opacity: 0.5;
+    width: 170px;
+    height: 170px;
+    pointer-events: none;
+    background-repeat: no-repeat;
+}
+.inmueble-carousel::after {
+	content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url(/wp-content/uploads/2025/04/marca-de-agua-de-AGRA.png);
+    background-size: contain;
+    opacity: 0.5;
+    width: 110px;
+    height: 110px;
+    pointer-events: none;
+    background-repeat: no-repeat;
+}
+.gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    user-select: none;
+    z-index: 10;
+}
+
+.gallery-arrow.left-arrow {
+    left: 10px;
+}
+
+.gallery-arrow.right-arrow {
+    right: 10px;
+}
+
+.gallery-thumbnails {
+    max-height: 86px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-thumbnails img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gallery-thumbnails img:hover {
+    transform: scale(1.1);
+    border-color: #0073aa;
+}
+
+.inmobiliaria-listado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.inmueble-carousel > div.overlay:hover  {
+    opacity: 1!important;
+}
+.carousel-images img {
+    width: 300px; /* Ancho máximo del contenedor */
+    height: 200px; /* Alto máximo del contenedor */
+    object-fit: cover; /* Ajustar la imagen sin recortes */
+    flex-shrink: 0;
+    background-color: #f8f8f8; /* Fondo opcional para las imágenes con espacios en blanco */
+}
+.inmueble-carousel > div.inmueble-price {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 9px 16px;
+    left: 0px;
+    border-radius: 4px;
+    font: normal normal 300 18px/20px Montserrat;
+    letter-spacing: 0.9px;
+    color: #FFFFFF;
+    text-shadow: 0px 3px 6px #0000006E;
+    font-family: Gotham,sans-serif;
+    bottom: 0px;
+    width: -webkit-fill-available;
+}
+.inmueble-info {
+    padding: 0px 15px;
+    background-color: #f9f8f7;
+    text-align: center;
+    border-top: none;
+    border: 1px solid #D5D5D5;
+}
+.caja-blanca-con-icono-tipo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    flex-direction: row;
+}
+.inmueble-info > div > div > p:nth-child(1) {
+    font: normal normal 500 16px / 18px Montserrat;
+    letter-spacing: 0.32px;
+    color: #272727;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+.inmueble-info > div > div > p:nth-child(2) {
+    font: normal normal normal 14px/19px Noto Sans;
+    letter-spacing: 0px;
+    color: #707070;
+    height: 36px;
+}
+.texto-direcc {
+    padding-block: 10px;
+}
+.texto-direcc > p {
+    margin-bottom: 0em;
+    text-align: left;
+}
+.caja-blanca-con-icono-tipo > img {
+    width: 48px;
+    height: 48px;
+    margin-top: -2px;
+}
+.inmueble-icons {
+    display: flex;
+    justify-content: center;
+    padding: 13px;
+    gap: 0;
+    font: normal normal normal 10px/14px Noto Sans;
+    letter-spacing: 0px;
+    color: #272727;
+    min-height: 77px;
+}
+.inmueble-icons > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 60px;
+    justify-content: center;
+}
+.inmueble-icons > span > img {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 5px;
+}
+.inmueble-carousel > div.overlay > a {
+    font: normal normal normal 18px / 19px Montserrat;
+    letter-spacing: 0.36px;
+    color: #FFFFFF !important;
+    border-radius: 0px;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    text-transform: none;
+}
+.inmueble-carousel > div.overlay > a:hover {
+    background: none;
+}
+.inmueble-card > div.inmueble-carousel > button {
+    background: transparent!important;
+    z-index: 3;
+}
+
+.propiedades-relacionadas {
+    margin-top: 40px;
+}
+
+.propiedades-relacionadas h2 {
+    font-size: 25px;
+    margin-bottom: 27px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #272727;
+    font-family: 'Gotham-Font',sans-serif;
+}
+
+.relacionadas-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.relacionadas-card:hover {
+    transform: translateY(-5px);
+}
+
+.relacionadas-contenido {
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.relacionadas-contenido h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.relacionadas-contenido p {
+    margin: 0 0 5px;
+}
+.inmueble-segunda-fila, .inmueble-primer-fila {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+}
+#lqd-contents-wrap {
+    width: -webkit-fill-available;
+    padding: 0px;
+}
+.relacionadas-listado {
+    justify-content: center;
+    margin-bottom: 70px;
+}
+
+
+.filtros-dinamicos {
+    padding: 15px;
+    background-color: #e8e5de!important;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center!important;
+}
+
+.filtros-dinamicos span {
+    padding: 12px 34px!important;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0px!important;
+    background: #FFFFFF!important;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #7070707A;
+    border-radius: 4px!important;
+    letter-spacing: 0.28px;
+    color: #707070!important;
+    font-size: 14px;
+    line-height: normal;
+    font-family: 'Gotham-Font',sans-serif;
+}
+
+.miga-de-pan {
+    background-color: #F9F8F4!important;
+    text-align: center;
+}
+
+.filtros-dinamicos > p {
+    letter-spacing: 0.36px;
+    color: #707070;
+    font-size: 18px;
+    line-height: 32px;
+    font-family: 'DM Serif Text',sans-serif;
+}
+
+.miga-de-pan a {
+    font: normal normal normal 18px/normal DM Serif Text;
+    letter-spacing: 0.36px;
+    color: #707070!important;
+    border-bottom: 1px solid #707070;
+    margin-inline: 10px;
+}
+.miga-de-pan span {
+    font: normal normal normal 18px/normal DM Serif Text;
+    letter-spacing: 0.36px;
+    color: #707070!important;
+    margin-inline: 10px;
+}
+
+.miga-de-pan a:hover {
+    text-decoration: underline;
+}
+
+.miga-de-pan span {
+    color: #333;
+}
+.inmueble-segunda-fila, .inmueble-primer-fila {
+    gap: 40px;
+}
+.inmueble-datos > div.inmueble-titulo > p:nth-child(1) {
+    letter-spacing: 0.5px;
+    color: #272727;
+    text-transform: uppercase;
+    font-family: 'Gotham-Font', sans-serif !important;
+    font-size: 25px!important;
+    line-height: 27px;
+}
+.inmueble-datos > div.inmueble-titulo > p:nth-child(2) {
+    letter-spacing: 0.4px;
+    color: #272727!important;
+    margin-bottom: 19px !important;
+    border-bottom: 2px solid #00B4A0;
+    padding-bottom: 17px;
+    font-size: 20px!important;
+    line-height: normal;
+    font-family: 'Gotham-Font',sans-serif!important;
+    font-weight: 400;
+    margin-top: 9px!important;
+}
+.inmueble-caracteristicas-titulo {
+    letter-spacing: 0.4px;
+    color: #272727;
+    font-size: 20px!important;
+    line-height: normal;
+    font-weight: 700;
+    font-family: 'Gotham-Font',sans-serif!important;
+    margin-bottom: 18px;
+	display: none!important;
+}
+.descripcion-inmueble {
+    font: normal normal normal 18px/22px Gotham;
+    letter-spacing: 0.36px;
+    color: #272727;
+    font-size: 18px;
+    line-height: normal;
+    font-weight: 400;
+    font-family: 'Gotham-Font',sans-serif;
+}
+.single-inmueble .inmueble-galeria > div.gallery-main-container > div.caja-precio > p {
+    letter-spacing: 0.62px;
+    color: #FFFFFF;
+    background: #050402bf;
+    padding: 22px 26px;
+    width: fit-content;
+    font-family: 'Gotham-Font', sans-serif;
+    font-size: 31px;
+    line-height: normal;
+    font-weight: 500;
+    margin-top: -81px;
+    z-index: 3;
+    position: absolute;
+    right: 3px;
+}
+.gallery-main-container {
+    margin-bottom: 10px;
+}
+.single-inmueble .inmueble-mapa {
+    width: 560px;
+    height: auto;
+}
+.single-inmueble .caja-iconos-inmuebles {
+    display: flex;
+    width: -webkit-fill-available;
+    justify-content: space-between;
+    background: #f9f8f7;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+.single-inmueble .inmueble-info {
+    padding: 0px 15px;
+    background-color: transparent;
+    text-align: center;
+    border-top: none;
+    border: none;
+}
+.single-inmueble .inmueble-info > div > div > p:nth-child(1) {
+    font: normal normal 500 16px / 18px Montserrat;
+    letter-spacing: 0.32px;
+    color: #272727;
+    min-height: auto;
+    display: flex;
+    align-items: flex-start;
+}
+.single-inmueble .texto-direcc {
+    padding-left: 34px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.single-inmueble .caja-blanca-con-icono-tipo {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+}
+.single-inmueble .caja-blanca-con-icono-tipo > img {
+    width: 60px;
+    height: 60px;
+    margin-top: -19px;
+}
+.single-inmueble .detalles {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.single-inmueble .detalles p {
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Gotham-Font', sans-serif;
+    letter-spacing: 0.32px;
+    color: #272727;
+    min-width: 196px;
+    margin-bottom: 8px;
+}
+.inmueble-detalles {
+    padding-top: 10px;
+    width: 650px;
+    margin-left: -111px;
+    margin-top: 0px;
+    border: none;
+    gap: 40px 85px;
+    justify-content: space-between!important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.titulo-propiedad {
+    width: -webkit-fill-available;
+    letter-spacing: 0.4px;
+    color: #272727;
+    font-size: 20px;
+    line-height: normal;
+    font-family: 'Gotham-Font',sans-serif;
+    font-weight: 700;
+    border-top: 2px solid #00B4A0;
+    padding-top: 20px;
+    margin-top: -10px;
+}
+.single-inmueble .detalles p.info-detalle {
+    min-width: fit-content;
+}
+.relaciones .texto-direcc {
+    padding-left: 0px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.relaciones .inmueble-info {
+    padding: 0px 15px;
+    background-color: #f9f8f7;
+    text-align: center;
+    border-top: none;
+    border: 1px solid #D5D5D5;
+}
+.inmueble-template.single-inmueble {
+    padding-top: 37px;
+}
+.inmobiliaria-listado {
+    margin-top: 16px;
+}
+.boton-whatsapp > a {
+    background: #11af9a!important;
+}
+.icono-informacion-inmueble {
+    width: 20px;
+}
+.watermark-wrapper {
+    position: relative;
+    display: inline-block;
+    overflow: hidden; /* Evitar que la marca de agua sobresalga del contenedor */
+}
+.boton-whatsapp {
+    margin-bottom: 30px;
+}
+
+.watermark-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url(/wp-content/uploads/2025/04/marca-de-agua-de-AGRA.png);
+    background-size: contain;
+    opacity: 0.5;
+    width: 48px;
+    height: 42px;
+    pointer-events: none;
+    background-repeat: no-repeat;
+}
+
+a.page-numbers {
+    letter-spacing: 0.4px;
+    color: #272727;
+    text-transform: capitalize;
+    font-size: 20px;
+    line-height: normal;
+    font-family: 'Gotham-Font', sans-serif;
+    font-weight: 500;
+    border: 1px solid #00000075;
+    padding: 4px 7px;
+    border-radius: 5px;
+}
+a.page-numbers:hover {
+    background: #11af9a!important;
+    color: #fff!important;
+}
+.pagination > span.page-numbers.current {
+    letter-spacing: 0.4px;
+    background: #11af9a!important;
+    color: #fff!important;
+    text-transform: capitalize;
+    font-size: 20px;
+    line-height: normal;
+    font-family: 'Gotham-Font', sans-serif;
+    font-weight: 500;
+    border: 1px solid #00000075;
+    padding: 4px 7px;
+    border-radius: 5px;
+}
+.inmueble-card.relaciones {
+    width: 302px!important;
+}
+/*#wrap > main > div {
+    display: none;
+}*/
+
+/* Código para Desktop */
+@media only screen and (max-width: 1500px){
+    .inmueble-galeria {
+        margin-bottom: 20px;
+        width: 703px;
+        margin-left: -22px;
+    }
+    .inmueble-detalles {
+        width: 702px;
+        margin-left: 28px;
+    }
+}
+/* Código para Tablets */
+@media only screen and (max-width: 1200px){
+    .inmueble-datos {
+        width: -webkit-fill-available;
+        padding-inline: 20px;
+    }
+    .inmueble-galeria {
+        margin-bottom: 20px;
+        width:-webkit-fill-available!important;
+        margin-left: 0px;
+        padding-inline: 20px;
+    }
+    .single-inmueble .inmueble-galeria > div.gallery-main-container > div.caja-precio > p {
+        margin-top: -81px;
+        right: 116px;
+    }
+    .inmueble-detalles, .inmueble-mapa {
+        width: 44%;
+        margin-left: 0px;
+    }
+}
+/* Código para Tablets y mobile*/
+@media only screen and (max-width: 900px) {
+    .inmueble-detalles, .inmueble-mapa {
+        width: 95%;
+        margin-left: 0px;
+    }
+    .single-inmueble .inmueble-mapa {
+        width: 95%;
+        height: auto;
+    }
+    .detalles-izq, .detalles-der {
+        width: 50%;
+    }
+    .single-inmueble .inmueble-galeria > div.gallery-main-container > div.caja-precio > p {
+        margin-top: -81px;
+        right: 3px;
+    }
+}
+/* Código para Mobile */
+@media only screen and (max-width: 700px) {
+    .propiedades-relacionadas h2 {
+        font-size: 22px;
+        margin-bottom: 19px;
+    }
+    .inmueble-datos > div.inmueble-titulo > p:nth-child(1) {
+        font-size: 20px!important;
+        line-height: normal;
+    }
+    .inmueble-datos > div.inmueble-titulo > p:nth-child(2) {
+        font-size: 18px!important;
+        line-height: normal;
+    }
+    .descripcion-inmueble {
+        font-size: 16px;
+        line-height: normal;
+    }
+    .detalles-izq, .detalles-der {
+        width: 100%;
+    }
+    .propiedades-relacionadas h2 {
+        font-size: 20px;
+    }
+    .inmueble-detalles, .inmueble-mapa {
+        width: 90%;
+        margin: auto;
+    }
+    .gallery-main-container img {
+        height: 350px!important;
+    }
+    .single-inmueble .caja-iconos-inmuebles {
+        display: flex;
+        width: -webkit-fill-available;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    .single-inmueble .texto-direcc {
+        padding-left: 16px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .single-inmueble .caja-blanca-con-icono-tipo > img {
+        width: 60px;
+        height: 60px;
+        margin-top: 0px;
+    }
+    .single-inmueble .inmueble-info > div > div > p:nth-child(1) {
+        font: normal normal 500 15px / 18px Montserrat;
+        letter-spacing: 0.32px;
+        color: #272727;
+        min-height: auto;
+        display: flex;
+        align-items: flex-start;
+    }
+}
+#buscador-inmuebles > span, #buscador-inmuebles input {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: none;
+    font-size: 14px;
+    line-height: normal;
+    font-family: 'Gotham-Font', sans-serif !important;
+}
+form#buscador-inmuebles {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+}
+#buscador-inmuebles  button {
+    background: #00AF9A!important;
+    box-shadow: 0px 3px 6px #00000029;
+    letter-spacing: 0.28px;
+    color: #FFFFFF!important;
+    font-size: 14px;
+    line-height: normal;
+    font-family: 'Gotham-Font', sans-serif;
+    padding: 18px 72px!important;
+}
+#header > div > div {
+    align-items: center !important;
+}
+#header > div > div > div.caja-botones-header, #buscador-header {
+    height: fit-content;
+}
+.inmueble-segunda-fila > div.inmueble-detalles > div.detalles-izq, .inmueble-segunda-fila > div.inmueble-detalles > div.detalles-der {
+    width: 40%;
+}
