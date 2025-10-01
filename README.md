@@ -22,18 +22,32 @@ Este plugin permite crear y gestionar un tipo de contenido personalizado llamado
 
 ### Shortcodes disponibles
 
-- `[buscador_principal]`  
-  Muestra un formulario de búsqueda avanzado para filtrar inmuebles por condición, tipo, ubicación y rango de precios.
+```php
+[buscador_principal]
+```
+Muestra un formulario de búsqueda avanzado para filtrar inmuebles por condición, tipo, ubicación y rango de precios.
 
-- `[buscador_header]`  
-  Similar al buscador principal, pensado para ubicarse en el header o áreas compactas.
+```php
+[buscador_header]
+```
+Similar al buscador principal, pensado para ubicarse en el header o áreas compactas.
 
-- `[listado_buscador]`  
-  Muestra un listado de inmuebles filtrados según los parámetros enviados por URL.
+```php
+[listado_buscador]
+```
+Muestra un listado de inmuebles filtrados según los parámetros enviados por URL.
 
-- `[listado_inmuebles]`  
-  Muestra un listado de inmuebles con opciones de filtrado por condición, tipo, provincia, departamento y rango de precios.  
-  Ejemplo: `[listado_inmuebles condicion="Venta" tipo="Casa" posts_per_page="10"]`
+
+```php
+[listado_inmuebles]
+```
+Muestra un listado de inmuebles con opciones de filtrado por condición, tipo, provincia, departamento y rango de precios.  
+
+
+Ejemplo: 
+```php
+[listado_inmuebles condicion="Venta" tipo="Casa" posts_per_page="10"]
+```
 
 ### Funcionalidades adicionales
 
